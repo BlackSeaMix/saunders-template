@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Belt-and-braces layer for the scaffold's own hand-rolled CSS transitions.
+   framer-motion's inline `initial` styles are handled in JS via
+   useReducedMotion() instead — a CSS override alone would pin opacity: 0. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

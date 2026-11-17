@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import { SHOP_NAME, TAGLINE } from "./content";
+import ScrollProgress from "../components/ScrollProgress";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} antialiased`}
       >
+        <ScrollProgress />
         {children}
       </body>
     </html>

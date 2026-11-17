@@ -45,7 +45,7 @@ fixed to `bg-brandYellow`); fixed the scaffold's two other cross-template bugs (
 never mapped to the loaded Geist font; reviews rendering 5 filled stars regardless of
 `review.rating`).
 
-Deployed to Vercel from `develop` (`tattoo-template-git-develop-aldb.vercel.app`) — `main` stays
+Deployed to Vercel from `develop` (`saunders-template-git-develop-aldb.vercel.app`) — `main` stays
 the clean, reusable template with `public/gallery/` gitignored; real Instagram photos were never
 downloaded (kept the gallery as placeholder tiles — scraping a shop's copyrighted work into a
 public template repo would redistribute it under this repo's license to every future re-skinner).

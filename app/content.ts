@@ -16,7 +16,7 @@ export const KVK_NUMBER = "56778899";
 // Required for metadataBase (absolute hreflang URLs) and JSON-LD. Update
 // once the real preview alias is known from the deploy step.
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://tattoo-template-blackseamix.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://saunders-template.vercel.app";
 
 export const SOCIALS = {
   instagram: "https://instagram.com/tattoosaunders",

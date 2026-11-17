@@ -37,6 +37,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# a real business's copyrighted work doesn't belong in a public template repo
+# (main stays the clean template; develop/the deployed branch can still seed
+# real photos locally, since .gitignore only governs what main ships with)
+public/gallery/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

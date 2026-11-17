@@ -7,11 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "bash deploy.sh",
-    "test:calendar": "node verify-calendar-booking.mjs"
+    "deploy": "bash deploy.sh"
   },
   "dependencies": {
-    "google-auth-library": "^11.3.2",
     "lucide-react": "^0.474.0",
     "next": "^15.5.28",
     "react": "^19.0.0",

@@ -37,13 +37,6 @@ export const SERVICE_CATEGORIES: {
 export const BOOKING_DEPOSIT_NOTE =
   "[Optional: deposit/cancellation policy, e.g. \"A €X deposit is required to book.\" Delete this line if not applicable.]";
 
-// Drives the bookable time-slot picker and the Google Calendar conflict
-// check — placeholder defaults, match these to the real business's hours
-// and typical appointment length.
-export const BOOKING_HOURS = { start: "09:00", end: "18:00" };
-export const BOOKING_SLOT_MINUTES = 30;
-export const BOOKING_DURATION_MINUTES = 60;
-
 export const GALLERY_ITEMS: { src: string | null; alt: string }[] = [
   { src: null, alt: "[Photo]" },
   { src: null, alt: "[Photo]" },

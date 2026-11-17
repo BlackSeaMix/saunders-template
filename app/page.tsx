@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Script from "next/script";
+import { useState } from "react";
 import { Phone, MapPin, Clock, Menu, X, Star, Sparkles } from "lucide-react";
 import {
   SHOP_NAME,
@@ -13,7 +12,6 @@ import {
   ADDRESS,
   SERVICE_CATEGORIES,
   BOOKING_DEPOSIT_NOTE,
-  BOOKING_DURATION_MINUTES,
   GALLERY_ITEMS,
   HOURS,
   REVIEWS,
@@ -27,149 +25,23 @@ const NAV_LINKS = [
   { href: "#contact", label: "Contact" },
 ];
 
-type BookingStatus = "idle" | "submitting" | "success" | "error";
-type Slot = { time: string; available: boolean };
-
-declare global {
-  interface Window {
-    grecaptcha?: {
-      render: (container: string, opts: { sitekey: string }) => number;
-      getResponse: (widgetId?: number) => string;
-      reset: (widgetId?: number) => void;
-    };
-    onRecaptchaLoad?: () => void;
-  }
-}
-
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-function addToGoogleCalendarUrl(service: string, date: string, time: string): string {
-  const start = new Date(`${date}T${time}:00`);
-  const end = new Date(start.getTime() + BOOKING_DURATION_MINUTES * 60 * 1000);
-  const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: `${service} at ${SHOP_NAME}`,
-    dates: `${fmt(start)}/${fmt(end)}`,
-    details: `Booked via the ${SHOP_NAME} website.`,
-    location: ADDRESS,
-  });
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
-}
+// Placeholder client-only submit — replaced by the consult form build-order
+// step with a real NEXT_PUBLIC_FORM_ENDPOINT / mailto flow. Kept minimal here
+// so the build stays green between steps.
+type BookingStatus = "idle" | "submitting" | "success";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>("idle");
-  const [bookingError, setBookingError] = useState<string | null>(null);
-  const [bookingDate, setBookingDate] = useState("");
-  const [bookingTime, setBookingTime] = useState("");
-  const [slots, setSlots] = useState<Slot[]>([]);
-  const [slotsLoading, setSlotsLoading] = useState(false);
-  const [lastBooking, setLastBooking] = useState<{ service: string; date: string; time: string } | null>(null);
-  const recaptchaWidgetId = useRef<number | null>(null);
 
-  if (typeof window !== "undefined" && RECAPTCHA_SITE_KEY) {
-    window.onRecaptchaLoad = () => {
-      if (window.grecaptcha && recaptchaWidgetId.current === null) {
-        recaptchaWidgetId.current = window.grecaptcha.render("recaptcha-container", {
-          sitekey: RECAPTCHA_SITE_KEY,
-        });
-      }
-    };
-  }
-
-  async function refreshSlots(date: string) {
-    if (!date) {
-      setSlots([]);
-      return;
-    }
-    setSlotsLoading(true);
-    try {
-      const res = await fetch(`/api/availability?date=${date}`);
-      const data = await res.json().catch(() => ({}));
-      setSlots(res.ok ? data.slots ?? [] : []);
-    } catch {
-      setSlots([]);
-    } finally {
-      setSlotsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    refreshSlots(bookingDate);
-  }, [bookingDate]);
-
-  async function handleBookingSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleBookingSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-
-    let captchaToken = "";
-    if (RECAPTCHA_SITE_KEY) {
-      captchaToken = window.grecaptcha?.getResponse(recaptchaWidgetId.current ?? undefined) ?? "";
-      if (!captchaToken) {
-        setBookingStatus("error");
-        setBookingError("Please confirm you're not a robot.");
-        return;
-      }
-    }
-
     setBookingStatus("submitting");
-    setBookingError(null);
-
-    try {
-      const res = await fetch("/api/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          contact: data.get("contact"),
-          service: data.get("service"),
-          date: data.get("date"),
-          time: data.get("time"),
-          notes: data.get("notes"),
-          captchaToken,
-        }),
-      });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        // Someone may have just taken this slot — refresh so the picker
-        // reflects reality instead of letting the user retry the same one.
-        refreshSlots(bookingDate);
-        throw new Error(body.error ?? "Something went wrong. Please call us instead.");
-      }
-
-      setBookingStatus("success");
-      setLastBooking({
-        service: String(data.get("service")),
-        date: bookingDate,
-        time: bookingTime,
-      });
-      form.reset();
-      setBookingDate("");
-      setBookingTime("");
-      setSlots([]);
-    } catch (err) {
-      setBookingStatus("error");
-      setBookingError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      if (RECAPTCHA_SITE_KEY) {
-        window.grecaptcha?.reset(recaptchaWidgetId.current ?? undefined);
-      }
-    }
+    setTimeout(() => setBookingStatus("success"), 300);
   }
 
   return (
     <div className="min-h-screen bg-ink text-cream">
-      {RECAPTCHA_SITE_KEY && (
-        <Script
-          src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit"
-          strategy="afterInteractive"
-        />
-      )}
-
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-cream/10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -382,46 +254,12 @@ export default function Home() {
               </optgroup>
             ))}
           </select>
-          <input
-            type="date"
-            name="date"
-            required
-            value={bookingDate}
-            min={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => {
-              setBookingDate(e.target.value);
-              setBookingTime("");
-            }}
-            className="bg-white text-ink placeholder:text-zinc-400 border border-zinc-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
-          />
-          <select
-            name="time"
-            required
-            value={bookingTime}
-            onChange={(e) => setBookingTime(e.target.value)}
-            disabled={!bookingDate || slotsLoading}
-            className="bg-white text-ink placeholder:text-zinc-400 border border-zinc-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary disabled:text-zinc-400"
-          >
-            <option value="" disabled>
-              {!bookingDate ? "Pick a date first" : slotsLoading ? "Loading times…" : "Select a time"}
-            </option>
-            {slots.map((slot) => (
-              <option key={slot.time} value={slot.time} disabled={!slot.available}>
-                {slot.time}
-                {!slot.available ? " (Booked)" : ""}
-              </option>
-            ))}
-          </select>
           <textarea
             name="notes"
             placeholder="Anything else we should know? (optional)"
             rows={3}
             className="sm:col-span-2 bg-white text-ink placeholder:text-zinc-400 border border-zinc-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
           />
-
-          {RECAPTCHA_SITE_KEY && (
-            <div id="recaptcha-container" className="sm:col-span-2 flex justify-center" />
-          )}
 
           <button
             type="submit"
@@ -431,23 +269,10 @@ export default function Home() {
             {bookingStatus === "submitting" ? "Sending…" : "Request Booking"}
           </button>
 
-          {bookingStatus === "success" && lastBooking && (
-            <div className="sm:col-span-2 text-center space-y-3">
-              <p className="text-sm text-emerald-600">
-                Thanks! We&apos;ve received your request and will confirm shortly.
-              </p>
-              <a
-                href={addToGoogleCalendarUrl(lastBooking.service, lastBooking.date, lastBooking.time)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary border-2 border-brandYellow text-ink text-sm font-semibold px-4 py-2 rounded-lg hover:brightness-95 transition-all duration-200"
-              >
-                + Add to Google Calendar
-              </a>
-            </div>
-          )}
-          {bookingStatus === "error" && (
-            <p className="sm:col-span-2 text-sm text-red-600">{bookingError}</p>
+          {bookingStatus === "success" && (
+            <p className="sm:col-span-2 text-center text-sm text-emerald-600">
+              Thanks! We&apos;ve received your request and will confirm shortly.
+            </p>
           )}
 
           <p className="sm:col-span-2 text-xs text-cream/60 text-center">

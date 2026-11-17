@@ -132,7 +132,7 @@ export default async function CityPage({
                   {phoneLabel}
                 </a>
               ) : (
-                <span className="italic text-cream/50">{phoneLabel}</span>
+                <span className="italic text-cream/60">{phoneLabel}</span>
               )}
             </p>
             <p className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export default async function CityPage({
                   {emailLabel}
                 </a>
               ) : (
-                <span className="italic text-cream/50">{emailLabel}</span>
+                <span className="italic text-cream/60">{emailLabel}</span>
               )}
             </p>
           </div>

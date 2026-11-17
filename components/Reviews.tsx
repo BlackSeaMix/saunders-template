@@ -9,7 +9,7 @@ export default function Reviews({ locale }: { locale: Locale }) {
     return (
       <section className="max-w-6xl mx-auto px-6 py-20 border-t border-cream/10">
         <Reveal>
-          <p className="text-center text-sm text-cream/50 max-w-2xl mx-auto">{t(SOCIAL_PROOF_NOTE, locale)}</p>
+          <p className="text-center text-sm text-cream/60 max-w-2xl mx-auto">{t(SOCIAL_PROOF_NOTE, locale)}</p>
         </Reveal>
       </section>
     );
@@ -26,7 +26,7 @@ export default function Reviews({ locale }: { locale: Locale }) {
                 <Star
                   key={star}
                   className={`h-4 w-4 ${
-                    star < review.rating ? "fill-brandYellow text-brandYellow" : "text-cream/20"
+                    star < review.rating ? "fill-brandYellow text-brandYellow" : "text-cream/40"
                   }`}
                 />
               ))}

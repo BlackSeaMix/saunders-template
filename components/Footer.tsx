@@ -24,7 +24,7 @@ export default function Footer({ locale }: { locale: Locale }) {
         <p className="text-center md:text-right">
           &copy; {new Date().getFullYear()} {SHOP_NAME}. {locale === "nl" ? "Alle rechten voorbehouden." : "All rights reserved."}
           <br />
-          <span className="text-cream/40">KvK {KVK_NUMBER}</span>
+          <span className="text-cream/60">KvK {KVK_NUMBER}</span>
         </p>
       </div>
     </footer>

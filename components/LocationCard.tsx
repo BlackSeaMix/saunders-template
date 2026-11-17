@@ -23,11 +23,11 @@ export default function LocationCard({ location, locale }: { location: Location;
         </p>
         <p className="flex items-center gap-2">
           <Phone className="h-4 w-4 text-brandYellow shrink-0" />
-          <span className={location.phoneDisplay ? undefined : "italic text-cream/50"}>{phoneLabel}</span>
+          <span className={location.phoneDisplay ? undefined : "italic text-cream/60"}>{phoneLabel}</span>
         </p>
         <p className="flex items-center gap-2">
           <Mail className="h-4 w-4 text-brandYellow shrink-0" />
-          <span className={location.email ? undefined : "italic text-cream/50"}>{emailLabel}</span>
+          <span className={location.email ? undefined : "italic text-cream/60"}>{emailLabel}</span>
         </p>
       </div>
     </Link>

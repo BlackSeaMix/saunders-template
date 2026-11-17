@@ -9,6 +9,7 @@ import Aftercare from "@/components/Aftercare";
 import Reviews from "@/components/Reviews";
 import Faq from "@/components/Faq";
 import ConsultForm from "@/components/ConsultForm";
+import { SHOP_NAME, SITE_URL, SOCIALS } from "@/app/content";
 import { LOCALES, type Locale } from "@/app/i18n";
 
 function isLocale(value: string): value is Locale {
@@ -20,8 +21,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (!isLocale(raw)) notFound();
   const locale = raw as Locale;
 
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SHOP_NAME,
+    url: `${SITE_URL}/${locale}`,
+    sameAs: [SOCIALS.instagram, SOCIALS.facebook, SOCIALS.x],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
       <Hero locale={locale} />
       <TrustGGD locale={locale} />
       <Services locale={locale} />

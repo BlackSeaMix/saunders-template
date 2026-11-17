@@ -146,14 +146,34 @@ export default function ConsultForm({
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input name="name" required placeholder={locale === "nl" ? "Je naam" : "Your name"} className={`sm:col-span-2 ${inputClass}`} />
-        <input type="email" name="email" required placeholder={locale === "nl" ? "E-mail" : "Email"} className={inputClass} />
-        <input type="tel" name="phone" placeholder={locale === "nl" ? "Telefoon (optioneel)" : "Phone (optional)"} className={inputClass} />
+        <input
+          name="name"
+          required
+          placeholder={locale === "nl" ? "Je naam" : "Your name"}
+          aria-label={locale === "nl" ? "Je naam" : "Your name"}
+          className={`sm:col-span-2 ${inputClass}`}
+        />
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder={locale === "nl" ? "E-mail" : "Email"}
+          aria-label={locale === "nl" ? "E-mail" : "Email"}
+          className={inputClass}
+        />
+        <input
+          type="tel"
+          name="phone"
+          placeholder={locale === "nl" ? "Telefoon (optioneel)" : "Phone (optional)"}
+          aria-label={locale === "nl" ? "Telefoon" : "Phone"}
+          className={inputClass}
+        />
 
         <select
           name="location"
           value={locationSlug}
           onChange={(e) => setLocationSlug(e.target.value)}
+          aria-label={locale === "nl" ? "Kies een vestiging" : "Choose a location"}
           className={`sm:col-span-2 ${inputClass}`}
         >
           <option value="">{locale === "nl" ? "Kies een vestiging" : "Choose a location"}</option>
@@ -164,7 +184,7 @@ export default function ConsultForm({
           ))}
         </select>
 
-        <select name="style" defaultValue="" className={inputClass}>
+        <select name="style" defaultValue="" aria-label={locale === "nl" ? "Stijl" : "Style"} className={inputClass}>
           <option value="" disabled>
             {locale === "nl" ? "Stijl" : "Style"}
           </option>
@@ -174,10 +194,20 @@ export default function ConsultForm({
             </option>
           ))}
         </select>
-        <input name="placement" placeholder={locale === "nl" ? "Plaatsing op het lichaam" : "Placement on the body"} className={inputClass} />
+        <input
+          name="placement"
+          placeholder={locale === "nl" ? "Plaatsing op het lichaam" : "Placement on the body"}
+          aria-label={locale === "nl" ? "Plaatsing op het lichaam" : "Placement on the body"}
+          className={inputClass}
+        />
 
-        <input name="size" placeholder={locale === "nl" ? "Ongeveer formaat" : "Approximate size"} className={inputClass} />
-        <select name="budget" defaultValue="" className={inputClass}>
+        <input
+          name="size"
+          placeholder={locale === "nl" ? "Ongeveer formaat" : "Approximate size"}
+          aria-label={locale === "nl" ? "Ongeveer formaat" : "Approximate size"}
+          className={inputClass}
+        />
+        <select name="budget" defaultValue="" aria-label={locale === "nl" ? "Budget" : "Budget"} className={inputClass}>
           <option value="" disabled>
             {locale === "nl" ? "Budget" : "Budget"}
           </option>
@@ -193,6 +223,7 @@ export default function ConsultForm({
           required
           rows={3}
           placeholder={locale === "nl" ? "Beschrijf je idee" : "Describe your idea"}
+          aria-label={locale === "nl" ? "Beschrijf je idee" : "Describe your idea"}
           className={`sm:col-span-2 ${inputClass}`}
         />
 
@@ -220,10 +251,17 @@ export default function ConsultForm({
         </div>
 
         <div className="sm:col-span-2">
-          <label className="text-sm text-cream/70 mb-2 block">
+          <label htmlFor="reference-upload" className="text-sm text-cream/70 mb-2 block">
             {locale === "nl" ? "Referentiefoto (optioneel, max 5 MB)" : "Reference photo (optional, max 5 MB)"}
           </label>
-          <input type="file" name="reference" accept="image/*" onChange={handleFileChange} className="text-sm text-cream/70" />
+          <input
+            id="reference-upload"
+            type="file"
+            name="reference"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="text-sm text-cream/70"
+          />
           {previewUrl && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={previewUrl} alt={fileName ?? ""} className="mt-3 h-24 w-24 rounded-lg object-cover" />

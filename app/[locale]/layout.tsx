@@ -59,7 +59,7 @@ export default async function LocaleLayout({
       >
         <ScrollProgress />
         <Header locale={locale} />
-        {children}
+        <main>{children}</main>
         <Footer locale={locale} />
       </body>
     </html>
